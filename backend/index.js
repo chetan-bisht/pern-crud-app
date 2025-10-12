@@ -6,8 +6,10 @@ import employeeRoute from './routes/employee.js';
 
 dotenv.config();
 
-const app = express();
 const PORT = 3000;
+
+const app = express();
+
 
 const corsOptions = {
     origin: '*'// Allow all origins

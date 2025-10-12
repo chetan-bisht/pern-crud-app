@@ -33,6 +33,8 @@ db.connect() // Attempt to connect to the database
         process.exit(1);
     });
 
+console.log('Attempting to connect to database...');
+
 db.on('error', (err) => {  // Handle database errors
     console.log('Database error:', err);// Log the error
     process.exit(1);
