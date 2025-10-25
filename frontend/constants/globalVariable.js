@@ -1,3 +1,3 @@
-const baseUrl = 'http://localhost:3000/api/employee';
+const baseUrl = 'https://pern-crud-app-7kxq.onrender.com';
 
 export { baseUrl };
