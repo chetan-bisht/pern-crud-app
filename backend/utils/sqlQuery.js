@@ -14,6 +14,10 @@ export const createEmployeeTableQuery = `
     );
 `;
 
+export const resetEmployeeSequenceQuery = `
+    SELECT setval('employee_details_id_seq', 1, false);
+`;
+
 export const getAllEmployeesQuery = `
     SELECT * FROM employee_details;
 `;
@@ -38,7 +42,7 @@ export const updateEmployeeQuery = `
     email = COALESCE($2, email),
     age = COALESCE($3, age),
     role = COALESCE($4::role_type, role),
-    salary = COALESCE($5, salary),
+    salary = COALESCE($5, salary)
     WHERE id = $6
     RETURNING *;
 `;

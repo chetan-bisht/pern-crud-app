@@ -1,8 +1,9 @@
 import { query } from "../utils/connectToDb.js";
-import { 
-    createRoleQuery, 
-    createEmployeeTableQuery, 
-    getAllEmployeesQuery, 
+import {
+    createRoleQuery,
+    createEmployeeTableQuery,
+    resetEmployeeSequenceQuery,
+    getAllEmployeesQuery,
     createEmployeeQuery,
     getEmployeeQuery,
     deleteEmployeeQuery,
@@ -55,18 +56,35 @@ export async function getEmployee(req, res, next) {
 export async function createEmployee(req, res, next) {
      try {
         if (!req.body) {
-            return res.status(400).json({ message: "Request body is required" });
+            return res.status(400).json({ error: "Request body is required" });
         }
 
         const { name, email, age, role, salary } = req.body;
         if (!name || !email || !age || !salary) {
-            return res.status(400).json({ message: "Missing required fields" });
-        };
+            return res.status(400).json({ error: "Missing required fields: name, email, age, and salary are required" });
+        }
+
+        // Validate data types
+        if (typeof age !== 'number' || age <= 18) {
+            return res.status(400).json({ error: "Age must be a number greater than 18" });
+        }
+
+        if (typeof salary !== 'number' || salary <= 0) {
+            return res.status(400).json({ error: "Salary must be a positive number" });
+        }
+
+        // Check if table is empty before resetting sequence
+        const existingEmployees = await query(getAllEmployeesQuery);
+        if (existingEmployees.rows.length === 0) {
+            // Reset sequence only if table is empty to ensure it starts from 1
+            await query(resetEmployeeSequenceQuery);
+        }
+
         const data = await query(createEmployeeQuery, [name, email, age, role, salary]);
         res.status(201).json(data.rows[0]);
      } catch (error) {
-        console.log(error.message);
-        return next(createError(400, "Could not create employee!"));
+        console.log('Create employee error:', error.message);
+        return next(createError(500, "Could not create employee!"));
     }
 }
 
@@ -85,6 +103,7 @@ export async function updateEmployee(req, res, next) {
 }
 
 export async function deleteEmployee(req, res, next) {
+    
     const id = req.params.id;
     const data = await query(deleteEmployeeQuery, [id]);
     console.log(data);
