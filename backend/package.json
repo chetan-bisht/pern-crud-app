@@ -1,15 +1,15 @@
 {
   "name": "crud",
   "version": "1.0.0",
-  "description": "",
+  "description": "A simple CRUD application backend using Node.js, Express, and PostgreSQL",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Chetan Bisht",
+  "license": "MIT",
   "type": "module",
   "dependencies": {
     "body-parser": "^2.2.0",
